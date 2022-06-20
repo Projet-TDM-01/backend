@@ -6,11 +6,10 @@ const parkingSchema = new mongoose.Schema({
   commune: { type: String, required: true },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
-  horraireOuver: { type: Date, required: true },
-  horraireFerm: { type: Date, required: true },
+  horraireOuver: { type: String, required: true },
+  horraireFerm: { type: String, required: true },
   tarifHeure: { type: Number, required: true },
-  placesOccup: { type: Number, required: true },
-  note: { type: Number, default: 0 }
+  nbPlace: { type: Number, required: true }
 }, { timestamps: true });
 
 module.exports = Parking = mongoose.model("parking", parkingSchema);
