@@ -39,10 +39,36 @@ const getAllParkingsService = async () => {
 
 const getParkingByIdService = async (parkingId) => {
   try {
-    const parkingsList = await Parking.findById(parkingId)
+    let parking = await Parking.findById(parkingId)
+
+    const dateStart = new Date()
+    dateStart.setHours(0)
+    dateStart.setMinutes(0)
+    dateStart.setSeconds(0)
+
+    const dateEnd = new Date()
+    dateEnd.setHours(0)
+    dateEnd.setMinutes(0)
+    dateEnd.setSeconds(0)
+    dateEnd.setMilliseconds(0)
+    dateEnd.setHours(24)
+    dateEnd.setUTCDate(dateEnd.getDate() + 1)
+
+    const reservationsForTheDay = await Reservation.find({
+      dateEntree: {
+        $gte: dateStart
+      },
+      dateSortie: {
+        $lte: dateEnd
+      },
+      parking: parking.id
+    })
+
+    let data = JSON.parse(JSON.stringify(parking));
+    data.reserved = reservationsForTheDay.length
     return {
       code: 200,
-      data: parkingsList
+      data
     }
   } catch (e) {
     console.error(e);
@@ -57,7 +83,8 @@ const getParkingByIdService = async (parkingId) => {
 
 const searchParkingByNameService = async (searchTerm) => {
   try {
-    const parkingsList = await Parking.find({ nom: { $regex: searchTerm } });
+    const regex = new RegExp(searchTerm, 'i')
+    const parkingsList = await Parking.find({ nom: { $regex: regex } });
     return {
       code: 200,
       data: parkingsList

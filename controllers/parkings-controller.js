@@ -16,7 +16,7 @@ const getAllParkings = async (req, res) => {
 
 const searchParkingByName = async (req, res) => {
   const { term } = req.body;
-  const { code, data } = await searchParkingByNameService(term)
+  const { code, data } = await searchParkingByNameService(term.toLowerCase())
   return res.status(code).json(data)
 }
 

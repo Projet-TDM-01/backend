@@ -6,8 +6,8 @@ const parkingSchema = new mongoose.Schema({
   commune: { type: String, required: true },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
-  horraireOuver: { type: String, required: true },
-  horraireFerm: { type: String, required: true },
+  horraireOuver: { type: Number, required: true },
+  horraireFerm: { type: Number, required: true },
   tarifHeure: { type: Number, required: true },
   nbPlace: { type: Number, required: true }
 }, { timestamps: true });
