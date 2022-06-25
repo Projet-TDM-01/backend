@@ -7,7 +7,6 @@ function registerValidation(data) {
     numero: Joi.string().required().min(6).max(255),
     email: Joi.string().required().min(6).max(255).email(),
     password: Joi.string().required().min(6).max(255),
-    photoLink: Joi.string(),
   });
   return schema.validate(data);
 }

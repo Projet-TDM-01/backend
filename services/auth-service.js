@@ -51,7 +51,6 @@ const registerService = async (data) => {
     prenom: data.prenom,
     numero: data.numero,
     email: data.email,
-    photoLink: data.photoLink,
     password: hashedPassword,
   });
 
@@ -72,6 +71,7 @@ const registerService = async (data) => {
         prenom: savedUser.prenom,
         numero: savedUser.numero,
         email: savedUser.email,
+        photolink: savedUser.photoLink,
         token
       }
     }

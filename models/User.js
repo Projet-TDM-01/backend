@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String, required: true
   },
-  photoLink: String
+  photoLink: { type: String, default: "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745" }
 }, { timestamps: true });
 
 module.exports = User = mongoose.model("user", userSchema);
