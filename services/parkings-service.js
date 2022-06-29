@@ -145,10 +145,80 @@ const calculateDistanceService = async (departLat, departLag, destLat, destLag) 
   }
 }
 
+const advancedSearchService = async (address, maxPrice, maxDistance) => {
+  try {
+    // get the list of the parkings proche de l'adress
+    const options = {
+      provider: 'google',
+
+      // Optional depending on the providers
+      // fetch: customFetchImplementation,
+      apiKey: 'AIzaSyCmkShDzip1-oGS8iUXbudxXeStdnClGes', // for Mapquest, OpenCage, Google Premier
+      formatter: 'json' // 'gpx', 'string', ...
+    };
+
+    const geocoder = NodeGeocoder(options);
+
+    // Using callback
+    const res = await geocoder.geocode(address + 'Algeria');
+
+    // get latitude et longitude
+    const latitudeSaved = res[0].latitude
+    const longitudeSaved = res[0].longitude
+
+    // get parkings list where tarifHeure < maxPrice
+    const listParkings = await Parking.find({
+      tarifHeure: {
+        $lte: maxPrice
+      },
+    })
+
+    let targetParkings = []
+    // const myAsyncLoopFunction = async (array) => {
+    //   const allAsyncResults = []
+
+    //   for (const item of array) {
+    //     const asyncResult = await asyncFunction(item)
+    //     allAsyncResults.push(asyncResult)
+    //   }
+
+    //   return allAsyncResults
+    // }
+    // for each parking calculate the distance between the adress and the parking
+    for (let parking of listParkings) {
+      const { data } = await calculateDistanceService(latitudeSaved, longitudeSaved,
+        parking.latitude, parking.longitude)
+      if (data.lengthInMeters <= maxDistance) {
+        console.log(data);
+        console.log(parking);
+        targetParkings.push(parking)
+      }
+    }
+    return {
+      code: 200,
+      data: targetParkings
+    }
+
+  } catch (e) {
+    console.error(e);
+    return {
+      code: 500,
+      data: {
+        msg: "server error..."
+      }
+    }
+  }
+}
+
+const getParkingsUnderMaxDistance = () => {
+
+}
+
 module.exports = {
   getAllParkingsService,
   searchNearestParkingService,
   getParkingByIdService,
   calculateDistanceService,
-  createParkingService
+  createParkingService,
+  advancedSearchService
 }
