@@ -1,7 +1,7 @@
 const Parking = require("../models/Parking")
 const Rate = require("../models/Rate")
 
-const rateParkingService = async (parkingId, { note, comment, userId }) => {
+const rateParkingService = async ({ parkingId, note, comment, userId }) => {
   try {
     const parking = await Parking.findById(parkingId)
     if (!parking) return { code: 400, data: { msg: "Parking doesn't exist" } }

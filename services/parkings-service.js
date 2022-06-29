@@ -54,7 +54,6 @@ const getParkingByIdService = async (parkingId) => {
     dateEnd.setSeconds(0)
     dateEnd.setMilliseconds(0)
     dateEnd.setHours(24)
-    dateEnd.setUTCDate(dateEnd.getDate() + 1)
 
     const reservationsForTheDay = await Reservation.find({
       dateEntree: {
