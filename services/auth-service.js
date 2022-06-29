@@ -81,7 +81,32 @@ const registerService = async (data) => {
   }
 }
 
+
+const existService = async (email) => {
+  try {
+    const user = await User.findOne({ email })
+    console.log(user);
+    if (user) return {
+      code: 200,
+      data: true
+    }
+    else return {
+      code: 200,
+      data: false
+    }
+
+  } catch (e) {
+    return {
+      code: 500,
+      data: {
+        exist: false
+      }
+    }
+  }
+}
+
 module.exports = {
   loginService,
-  registerService
+  registerService,
+  existService
 }

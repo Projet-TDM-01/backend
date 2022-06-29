@@ -4,7 +4,7 @@ const User = require("../models/User");
 
 const getAllReservationsService = async (userId) => {
   try {
-    const reservations = await Reservation.find({ user: userId }).populate("user").populate("parking")
+    const reservations = await Reservation.find({ user: userId }).populate("parking")
     return {
       code: 200,
       data: reservations
@@ -56,9 +56,17 @@ const createReservationService = async ({ userId, parkingId, dateEntree, dateSor
 
     if (!reservation) return { code: 400, data: { msg: "Can't create reservation" } }
 
+
+
     return {
       code: 200,
-      data: reservation
+      data: {
+        _id: reservation._id,
+        dateEntree: reservation.dateEntree,
+        dateSortie: reservation.dateSortie,
+        numeroPlace: reservation.numeroPlace,
+        parking: parking
+      }
     }
   } catch (e) {
     console.error(e);

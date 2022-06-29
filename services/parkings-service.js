@@ -1,5 +1,7 @@
 const Parking = require("../models/Parking")
 const axios = require("axios")
+const NodeGeocoder = require('node-geocoder');
+const { json } = require("express");
 
 const createParkingService = async (parking) => {
   try {
@@ -81,13 +83,43 @@ const getParkingByIdService = async (parkingId) => {
   }
 }
 
-const searchParkingByNameService = async (searchTerm) => {
+const searchNearestParkingService = async (address) => {
   try {
-    const regex = new RegExp(searchTerm, 'i')
-    const parkingsList = await Parking.find({ nom: { $regex: regex } });
+    const options = {
+      provider: 'google',
+
+      // Optional depending on the providers
+      // fetch: customFetchImplementation,
+      apiKey: 'AIzaSyCmkShDzip1-oGS8iUXbudxXeStdnClGes', // for Mapquest, OpenCage, Google Premier
+      formatter: 'json' // 'gpx', 'string', ...
+    };
+
+    const geocoder = NodeGeocoder(options);
+
+    // Using callback
+    const res = await geocoder.geocode(address + 'Algeria');
+
+    // get latitude et longitude
+    const latitudeSaved = res[0].latitude
+    const longitudeSaved = res[0].longitude
+
+    const listParkings = await Parking.find({
+      latitude: {
+        $gte: latitudeSaved - 0.1
+      },
+      latitude: {
+        $lte: latitudeSaved + 0.1
+      },
+      longitude: {
+        $gte: longitudeSaved - 0.1
+      },
+      longitude: {
+        $lte: longitudeSaved + 0.1
+      },
+    })
     return {
       code: 200,
-      data: parkingsList
+      data: listParkings
     }
   } catch (e) {
     console.error(e);
@@ -116,7 +148,7 @@ const calculateDistanceService = async (departLat, departLag, destLat, destLag) 
 
 module.exports = {
   getAllParkingsService,
-  searchParkingByNameService,
+  searchNearestParkingService,
   getParkingByIdService,
   calculateDistanceService,
   createParkingService
