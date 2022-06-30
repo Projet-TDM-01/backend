@@ -1,4 +1,4 @@
-const { rateParkingService } = require("../services/user-service")
+const { rateParkingService, getParkingRateService } = require("../services/user-service")
 
 const rateParking = async (req, res) => {
   const { note } = req.body;
@@ -6,5 +6,10 @@ const rateParking = async (req, res) => {
   const { code, data } = await rateParkingService(req.body)
   return res.status(code).json(data)
 }
+const getParkingRate = async (req, res) => {
+  const parkingId = req.params.parkingId;
+  const { code, data } = await getParkingRateService(parkingId)
+  return res.status(code).json(data)
+}
 
-module.exports = { rateParking }
+module.exports = { rateParking, getParkingRate }

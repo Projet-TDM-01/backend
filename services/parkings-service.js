@@ -174,16 +174,7 @@ const advancedSearchService = async (address, maxPrice, maxDistance) => {
     })
 
     let targetParkings = []
-    // const myAsyncLoopFunction = async (array) => {
-    //   const allAsyncResults = []
 
-    //   for (const item of array) {
-    //     const asyncResult = await asyncFunction(item)
-    //     allAsyncResults.push(asyncResult)
-    //   }
-
-    //   return allAsyncResults
-    // }
     // for each parking calculate the distance between the adress and the parking
     for (let parking of listParkings) {
       const { data } = await calculateDistanceService(latitudeSaved, longitudeSaved,

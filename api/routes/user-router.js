@@ -1,6 +1,7 @@
 const router = require("express").Router();
-const { rateParking } = require("../../controllers/user-controller")
+const { rateParking, getParkingRate } = require("../../controllers/user-controller")
 
-router.post("/rate/:parking_id", rateParking)
+router.post("/rate", rateParking)
+router.get("/parking-rate/:parkingId", getParkingRate)
 
 module.exports = router;

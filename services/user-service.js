@@ -28,4 +28,22 @@ const rateParkingService = async ({ parkingId, note, comment, userId }) => {
   }
 }
 
-module.exports = { rateParkingService }
+const getParkingRateService = async (parkingId) => {
+  try {
+    const rates = await Rate.find({ parking: parkingId })
+    return {
+      code: 200,
+      data: rates
+    }
+  } catch (e) {
+    console.error(e);
+    return {
+      code: 500,
+      data: {
+        msg: "Server error..."
+      }
+    }
+  }
+}
+
+module.exports = { rateParkingService, getParkingRateService }

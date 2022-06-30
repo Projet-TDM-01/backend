@@ -38,7 +38,8 @@ const createReservationService = async ({ userId, parkingId, dateEntree, dateSor
     dateEnd.setMilliseconds(0)
     dateEnd.setHours(24)
 
-    if (parking.horraireOuver > Date(dateEntree).getHours() || parking.horraireFerm < Date(dateEntree).getHours())
+
+    if (parking.horraireOuver > new Date(dateEntree).getHours() || parking.horraireFerm < new Date(dateEntree).getHours())
       return { code: 400, data: { msg: "Parking n'est pas ouvert" } }
 
     const reservationsForTheDay = await Reservation.find({
@@ -59,7 +60,7 @@ const createReservationService = async ({ userId, parkingId, dateEntree, dateSor
         parking: parkingId,
         dateEntree,
         dateSortie,
-        numeroPlace: parking.nbPlace - reservationsForTheDay.length + 1
+        numeroPlace: reservationsForTheDay.length + 1
       }
     )
 
